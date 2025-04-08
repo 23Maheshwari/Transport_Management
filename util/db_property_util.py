@@ -2,24 +2,21 @@ import configparser
 
 class DBPropertyUtil:
     @staticmethod
-    def get_connection_string(filename: str) -> dict:
+    def get_connection_string(file_path: str):
         config = configparser.ConfigParser()
-        config.read(filename)
+        config.read(file_path)
 
-        print("DEBUG - Sections found:", config.sections())  # To verify if the section is loaded
+        # Debugging: Print sections found in the file
+        print("DEBUG - Sections found:", config.sections())
 
         if 'database' not in config:
             raise Exception("Missing 'database' section in properties file")
 
+        db_config = config['database']
         return {
-            'host': config['database']['host'],
-            'port': config['database']['port'],
-            'user': config['database']['user'],
-            'password': config['database']['password'],
-            'database': config['database']['database']
+            'host': db_config.get('host'),
+            'port': db_config.get('port'),
+            'user': db_config.get('user'),
+            'password': db_config.get('password'),
+            'database': db_config.get('database')
         }
-
-# Test this file directly
-if __name__ == "__main__":
-    props = DBPropertyUtil.get_connection_string("db.properties")
-    print("Connection Properties:", props)

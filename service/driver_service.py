@@ -1,6 +1,6 @@
 from dao.driver_dao import DriverDAO
 from entity.driver import Driver
-from exceptions import DriverNotFoundException, InvalidDriverDataException
+from exceptions import DriverNotFoundException ,InvalidDriverDataException
 
 class DriverService:
     def __init__(self):

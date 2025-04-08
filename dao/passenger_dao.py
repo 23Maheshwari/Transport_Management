@@ -15,9 +15,10 @@ class PassengerDAO:
             passenger.get_email(),
             passenger.get_phone_number()
         )
+        # Debugging: Print the query and values
+        print(f"Debug: Query={query}, Values={values}")
         self.cursor.execute(query, values)
         self.conn.commit()
-
     def get_all_passengers(self):
         query = "SELECT * FROM Passengers"
         self.cursor.execute(query)
@@ -25,13 +26,21 @@ class PassengerDAO:
         for row in self.cursor.fetchall():
             passengers.append(Passenger(row[0], row[1], row[2], row[3], row[4], row[5]))
         return passengers
-
     def get_passenger_by_id(self, passenger_id: int):
-        query = "SELECT * FROM Passengers WHERE PassengerID = %s"
+        query = "SELECT PassengerID, FirstName, Gender, Age, Email, PhoneNumber FROM Passengers WHERE PassengerID = %s"
         self.cursor.execute(query, (passenger_id,))
         row = self.cursor.fetchone()
         if row:
-            return Passenger(row[0], row[1], row[2], row[3], row[4], row[5])
+            # Map the row to a Passenger object
+            passenger = Passenger(
+                passenger_id=row[0],  # PassengerID
+                first_name=row[1],   # FirstName
+                age=row[3],          # Age
+                phone_number=row[5]  # PhoneNumber
+            )
+            passenger.set_gender(row[2])  # Gender
+            passenger.set_email(row[4])  # Email
+            return passenger
         return None
 
     def update_passenger(self, passenger: Passenger):

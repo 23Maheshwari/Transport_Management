@@ -23,6 +23,15 @@ class TripDAO:
         self.cursor.execute(query, values)
         self.conn.commit()
 
+    def get_available_trips(self):
+        query = """
+            SELECT * FROM Trips
+            WHERE Status = 'Scheduled' AND TripType = 'Passenger'
+            ORDER BY DepartureDate ASC
+        """
+        self.cursor.execute(query)
+        trips = self.cursor.fetchall()
+        return trips
     def get_all_trips(self):
         query = "SELECT * FROM Trips"
         self.cursor.execute(query)

@@ -19,6 +19,7 @@ class BookingDAO:
         )
         self.cursor.execute(query, values)
         self.conn.commit()
+        return self.cursor.lastrowid
 
     def get_all_bookings(self):
         query = "SELECT * FROM Bookings"
@@ -29,11 +30,15 @@ class BookingDAO:
         return bookings
 
     def get_booking_by_id(self, booking_id: int):
-        query = "SELECT * FROM Bookings WHERE BookingID = %s"
+        query = "SELECT BookingID, TripID, PassengerID, BookingDate, Status FROM Bookings WHERE BookingID = %s"
         self.cursor.execute(query, (booking_id,))
         row = self.cursor.fetchone()
         if row:
-            return Booking(row[0], row[1], row[2], row[3], row[4])
+            # Ensure the row has the expected number of fields
+            if len(row) == 5:
+                return Booking(row[0], row[1], row[2], row[3], row[4])
+            else:
+                raise ValueError(f"Unexpected row structure: {row}")
         return None
 
     def cancel_booking(self, booking_id: int):
@@ -45,3 +50,22 @@ class BookingDAO:
         query = "DELETE FROM Bookings WHERE BookingID = %s"
         self.cursor.execute(query, (booking_id,))
         self.conn.commit()
+    
+    def get_latest_booking_by_passenger_id(self, passenger_id: int):
+        query = "SELECT * FROM Bookings WHERE PassengerID = %s ORDER BY BookingDate DESC LIMIT 1"
+        self.cursor.execute(query, (passenger_id,))
+        row = self.cursor.fetchone()
+        if row:
+            return Booking(row[0], row[1], row[2], row[3], row[4])
+        return None
+    
+    def get_past_bookings_by_passenger_id(self, passenger_id: int):
+        query = """
+            SELECT b.BookingID, b.TripID, b.PassengerID, b.BookingDate, b.Status, t.DepartureDate, t.ArrivalDate, t.RouteID
+            FROM Bookings b
+            JOIN Trips t ON b.TripID = t.TripID
+            WHERE b.PassengerID = %s AND b.Status IN ('Completed', 'Confirmed','Cancelled')
+            ORDER BY b.BookingDate DESC
+        """
+        self.cursor.execute(query, (passenger_id,))
+        return self.cursor.fetchall()

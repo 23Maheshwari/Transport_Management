@@ -35,3 +35,8 @@ class Booking:
 
     def set_status(self, status):
         self.__status = status
+    
+    def __str__(self):
+        return (f"BookingID: {self.__booking_id}, TripID: {self.__trip_id}, "
+                f"PassengerID: {self.__passenger_id}, BookingDate: {self.__booking_date}, "
+                f"Status: {self.__status}")

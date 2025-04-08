@@ -1,5 +1,5 @@
 class Trip:
-    def __init__(self, trip_id=None, vehicle_id=None, route_id=None, departure_date=None, arrival_date=None, status=None, trip_type=None, max_passengers=None):
+    def __init__(self, trip_id=None, vehicle_id=None, route_id=None, departure_date=None, arrival_date=None, status=None, trip_type=None, max_passengers=None,driver_id=None,):
         self.__trip_id = trip_id
         self.__vehicle_id = vehicle_id
         self.__route_id = route_id
@@ -8,6 +8,7 @@ class Trip:
         self.__status = status
         self.__trip_type = trip_type
         self.__max_passengers = max_passengers
+        self.__driver_id= driver_id
 
     def get_trip_id(self):
         return self.__trip_id
@@ -56,4 +57,16 @@ class Trip:
 
     def set_max_passengers(self, max_passengers):
         self.__max_passengers = max_passengers
-        
+    
+    # Getter and Setter for driver_id
+    def get_driver_id(self):
+        return self.__driver_id
+
+    def set_driver_id(self, driver_id):
+        self.__driver_id = driver_id
+    
+  
+    def __str__(self):
+        return (f"TripID: {self.trip_id}, VehicleID: {self.vehicle_id}, RouteID: {self.route_id}, "
+                f"DepartureDate: {self.departure_date}, ArrivalDate: {self.arrival_date}, "
+                f"Status: {self.status}, TripType: {self.trip_type}, MaxPassengers: {self.max_passengers}")

@@ -126,7 +126,7 @@ CREATE TABLE Drivers (
 desc drivers;
 INSERT INTO Drivers (Name, LicenseNumber, PhoneNumber, Status) VALUES
 ('John Smith', 'DL123456789', '9876543210', 'Available'),
-('Jane Doe', 'DL987654321', '8765432109', 'Available'),
+('Jane Doe', 'DL987654321', '8765432109', 'Assigned'),
 ('Michael Johnson', 'DL456789123', '7654321098', 'Available'),
 ('Emily Brown', 'DL789123456', '6543210987', 'Available'),
 ('Sophia Davis', 'DL321654987', '5432109876', 'Available'),
@@ -139,3 +139,6 @@ INSERT INTO Drivers (Name, LicenseNumber, PhoneNumber, Status) VALUES
 ALTER TABLE Trips
 ADD COLUMN DriverID INT,
 ADD FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID) ON DELETE SET NULL;
+
+desc passengers;
+

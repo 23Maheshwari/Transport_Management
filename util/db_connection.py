@@ -7,7 +7,7 @@ class DBConnUtil:
     def get_connection():
         try:
             # Load properties from db.properties
-            props = DBPropertyUtil.get_connection_string("db.properties")
+            props = DBPropertyUtil.get_connection_string("d:\\Transport_Management\\util\\db.properties")
 
             # Create connection using loaded properties
             connection = mysql.connector.connect(
