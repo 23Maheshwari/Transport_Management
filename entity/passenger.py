@@ -1,12 +1,12 @@
 class Passenger:
 
-    def __init__(self, passenger_id=None, first_name=None, age=None, phone_number=None):
+    def __init__(self, passenger_id=None, first_name=None, age=None, phone_number=None,gender=None, email=None):
         self.__passenger_id = passenger_id
         self.__first_name = first_name
         self.__age = age
         self.__phone_number = phone_number
-        self.__gender = None
-        self.__email = None
+        self.__gender = gender
+        self.__email = email
 
     # Other methods remain unchanged
 

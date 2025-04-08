@@ -6,12 +6,6 @@ class DBPropertyUtil:
         config = configparser.ConfigParser()
         config.read(file_path)
 
-        # Debugging: Print sections found in the file
-        print("DEBUG - Sections found:", config.sections())
-
-        if 'database' not in config:
-            raise Exception("Missing 'database' section in properties file")
-
         db_config = config['database']
         return {
             'host': db_config.get('host'),

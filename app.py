@@ -5,6 +5,8 @@ from service.booking_service import BookingService
 from entity.passenger import Passenger
 from entity.booking import Booking
 from exceptions.exceptions import BookingNotFoundException, InvalidBookingDataException
+from admin.admin import Admin
+
 # Initialize DAOs and Services
 passenger_dao = PassengerDAO()
 booking_dao = BookingDAO()
@@ -176,13 +178,19 @@ def customer_menu():
 def admin_menu():
     while True:
         print("\n===== Admin Menu =====")
-        print("1. 🧍‍♂️ View All Data")
-        print("2. 🚪 Logout")
+        print("1. Manage Trips")
+        print("2. Manage Bookings")
+        print("3. Manage Passengers")
+        print("4. Logout")
         choice = input("Enter choice: ")
 
         if choice == "1":
-            view_all_data()
+            Admin.manage_trips()
         elif choice == "2":
+            Admin.manage_bookings()
+        elif choice == "3":
+            Admin.manage_passengers()
+        elif choice == "4":
             print("👋 Logging out. Bye!")
             break
         else:

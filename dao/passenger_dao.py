@@ -20,11 +20,21 @@ class PassengerDAO:
         self.cursor.execute(query, values)
         self.conn.commit()
     def get_all_passengers(self):
-        query = "SELECT * FROM Passengers"
+        query = "SELECT PassengerID, FirstName, Age, PhoneNumber, Gender, Email FROM Passengers"
         self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+
         passengers = []
-        for row in self.cursor.fetchall():
-            passengers.append(Passenger(row[0], row[1], row[2], row[3], row[4], row[5]))
+        for row in rows:
+            passenger = Passenger(
+                passenger_id=row[0],
+                first_name=row[1],
+                age=row[2],
+                phone_number=row[3],
+                gender=row[4],
+                email=row[5]
+            )
+            passengers.append(passenger)
         return passengers
     def get_passenger_by_id(self, passenger_id: int):
         query = "SELECT PassengerID, FirstName, Gender, Age, Email, PhoneNumber FROM Passengers WHERE PassengerID = %s"
