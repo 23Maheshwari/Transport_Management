@@ -1,6 +1,6 @@
 from dao.booking_dao import BookingDAO
 from entity.booking import Booking
-from exceptions import BookingNotFoundException ,InvalidBookingDataException
+from exceptions.exceptions import BookingNotFoundException ,InvalidBookingDataException
 
 class BookingService:
     def __init__(self):

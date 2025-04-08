@@ -1,6 +1,6 @@
 from dao.vehicle_dao import VehicleDAO
 from entity.vehicle import Vehicle
-from exceptions import VehicleNotFoundException, InvalidVehicleDataException
+from exceptions.exceptions import VehicleNotFoundException, InvalidVehicleDataException
 
 class VehicleService:
     def __init__(self):

@@ -1,6 +1,6 @@
 from dao.trip_dao import TripDAO
 from entity.trip import Trip
-from exceptions import TripNotFoundException, InvalidTripDataException, DriverNotAvailableException
+from exceptions.exceptions import TripNotFoundException, InvalidTripDataException, DriverNotAvailableException
 
 class TripService:
     def __init__(self):

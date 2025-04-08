@@ -4,7 +4,7 @@ from dao.trip_dao import TripDAO
 from service.booking_service import BookingService
 from entity.passenger import Passenger
 from entity.booking import Booking
-from exceptions import BookingNotFoundException, InvalidBookingDataException
+from exceptions.exceptions import BookingNotFoundException, InvalidBookingDataException
 # Initialize DAOs and Services
 passenger_dao = PassengerDAO()
 booking_dao = BookingDAO()
@@ -115,7 +115,6 @@ def cancel_booking(passenger_id: int):
     try:
         print("\n🛑 Cancel a Booking:")
         booking_id = int(input("Enter Booking ID to cancel: "))
-        
         # Cancel the booking
         booking_service.cancel_booking(booking_id, passenger_id)  # Pass both booking_id and passenger_id
         print(f"✅ Booking with ID {booking_id} has been successfully canceled.")

@@ -1,6 +1,6 @@
 from dao.route_dao import RouteDAO
 from entity.route import Route
-from exceptions import RouteNotFoundException, InvalidRouteDataException
+from exceptions.exceptions import RouteNotFoundException, InvalidRouteDataException
 
 class RouteService:
     def __init__(self):

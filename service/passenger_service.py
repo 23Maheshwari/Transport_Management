@@ -1,6 +1,6 @@
 from dao.passenger_dao import PassengerDAO
 from entity.passenger import Passenger
-from exceptions import PassengerNotFoundException, InvalidPassengerDataException
+from exceptions.exceptions import PassengerNotFoundException, InvalidPassengerDataException
 
 class PassengerService:
     def __init__(self):
