@@ -60,3 +60,12 @@ class DriverService:
             raise InvalidDriverDataException(
                 f"Driver must be in status: {', '.join(allowed_statuses)}"
             )
+    
+    def get_all_drivers(self):
+        return self.driver_dao.get_all_drivers()
+    
+    def update_driver(self, driver):
+        return self.driver_dao.update_driver(driver)
+    
+    def delete_driver(self, driver_id: int):
+        self.driver_dao.delete_driver(driver_id)

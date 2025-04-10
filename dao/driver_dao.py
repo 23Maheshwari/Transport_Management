@@ -98,3 +98,5 @@ class DriverDAO:
         query = "UPDATE Trips SET Status = %s WHERE TripID = %s"
         self.cursor.execute(query, (status, trip_id))
         self.conn.commit()
+
+    

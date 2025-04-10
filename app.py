@@ -176,8 +176,9 @@ def admin_menu():
         print("3. Manage Passengers")
         print("4. Manage Vehicles")
         print("5. Manage Routes")
-        print("6. Reports and Analytics")
-        print("7. Logout")
+        print("6. Manage Drivers")
+        print("7. Reports and Analytics")
+        print("8. Logout")
         choice = input("Enter choice: ")
 
         if choice == "1":
@@ -191,8 +192,10 @@ def admin_menu():
         elif choice == "5":
             Admin.manage_routes()
         elif choice == "6":
-            Admin.view_reports()
+            Admin.manage_drivers()
         elif choice == "7":
+            Admin.view_reports()
+        elif choice == "8":
             print("👋 Logging out. Bye!")
             break
         else:

@@ -4,10 +4,14 @@ from dao.trip_dao import TripDAO
 from entity.trip import Trip
 from exceptions.exceptions import TripNotFoundException, InvalidTripDataException, DriverNotAvailableException,DriverNotFoundException
 from service.driver_service import DriverService
+from dao.driver_dao import DriverDAO
+
+
 class TripService:
     def __init__(self):
         self.trip_dao = TripDAO()
         self.driver_service = DriverService()
+        self.driver_dao = DriverDAO() 
 
     def add_trip(self, trip: Trip) -> bool:
         # Validate trip data
@@ -95,3 +99,7 @@ class TripService:
     
     def update_trip_status(self, trip_id: int, status: str):
         return self.trip_dao.update_trip_status(trip_id, status)
+    
+    def is_driver_available(self, driver_id: int) -> bool:
+        driver = self.driver_dao.get_driver_by_id(driver_id)
+        return driver is not None and driver.get_status().lower() == "available"
