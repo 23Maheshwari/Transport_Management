@@ -93,3 +93,59 @@ class TripDAO:
         self.cursor.execute(query, (driver_id,))
         count = self.cursor.fetchone()[0]
         return count == 0
+    
+    def get_driver_trips(self, driver_id: int) -> list:
+        """Get all trips assigned to a specific driver"""
+        query = """
+            SELECT t.* FROM Trips t
+            WHERE t.DriverID = %s
+            ORDER BY t.DepartureDate
+        """
+        self.cursor.execute(query, (driver_id,))
+        return [Trip(*row) for row in self.cursor.fetchall()]
+
+    def log_issue(self, driver_id: int, description: str, trip_id: int = None) -> bool:
+        """Record driver issues in the database"""
+        query = """
+            INSERT INTO DriverIssues 
+            (DriverID, TripID, Description, ReportedAt)
+            VALUES (%s, %s, %s, NOW())
+        """
+        self.cursor.execute(query, (driver_id, trip_id, description))
+        self.conn.commit()
+        return True
+    
+    def get_trips_by_driver(self, driver_id: int):
+        query = "SELECT * FROM Trips WHERE DriverID = %s"
+        self.cursor.execute(query, (driver_id,))
+        rows = self.cursor.fetchall()
+        trips = []
+        for row in rows:
+            trip = Trip(
+                trip_id=row[0],
+                vehicle_id=row[1],
+                route_id=row[2],
+                departure_date=row[3],
+                arrival_date=row[4],
+                status=row[5],
+                driver_id=row[6]
+            )
+            trips.append(trip)
+        return trips
+    
+    def update_trip_status(self, trip_id: int, status: str) -> bool:
+        try:
+            conn = DBConnUtil.get_connection()
+            cursor = conn.cursor()
+            query = "UPDATE trips SET status = %s WHERE TripID = %s"
+            cursor.execute(query, (status, trip_id))
+            conn.commit()
+            return cursor.rowcount > 0
+        except Exception as e:
+            print(f"❌ Error updating trip status: {e}")
+            return False
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()

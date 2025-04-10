@@ -1,10 +1,13 @@
+#service\trip_service.py
+
 from dao.trip_dao import TripDAO
 from entity.trip import Trip
-from exceptions.exceptions import TripNotFoundException, InvalidTripDataException, DriverNotAvailableException
-
+from exceptions.exceptions import TripNotFoundException, InvalidTripDataException, DriverNotAvailableException,DriverNotFoundException
+from service.driver_service import DriverService
 class TripService:
     def __init__(self):
         self.trip_dao = TripDAO()
+        self.driver_service = DriverService()
 
     def add_trip(self, trip: Trip) -> bool:
         # Validate trip data
@@ -62,24 +65,33 @@ class TripService:
         self.trip_dao.delete_trip(trip_id)
         return True
 
+    # Add to trip_service.py
     def allocate_driver(self, trip_id: int, driver_id: int) -> bool:
-        # Check if the trip exists
-        trip = self.trip_dao.get_trip_by_id(trip_id)
+        # Check trip exists
+        trip = self.get_trip_by_id(trip_id)
         if not trip:
-            raise TripNotFoundException(f"Trip with ID {trip_id} not found.")
-
-        # Check if the driver is available (assume a method exists in DAO)
-        if not self.trip_dao.is_driver_available(driver_id):
-            raise DriverNotAvailableException(f"Driver with ID {driver_id} is not available.")
-
-        # Allocate the driver
-        return self.trip_dao.allocate_driver(trip_id, driver_id)
+            raise TripNotFoundException(f"Trip {trip_id} not found")
+        
+        # Check driver exists and is available
+        driver = self.driver_service.get_driver_by_id(driver_id)
+        if not driver:
+            raise DriverNotFoundException(f"Driver {driver_id} not found")
+        if not self.is_driver_available(driver_id):
+            raise DriverNotAvailableException(f"Driver {driver_id} is already assigned")
+        
+        # Update both trip and driver status
+        self.trip_dao.allocate_driver(trip_id, driver_id)
+        return True
 
     def deallocate_driver(self, trip_id: int) -> bool:
-        # Check if the trip exists
-        trip = self.trip_dao.get_trip_by_id(trip_id)
-        if not trip:
-            raise TripNotFoundException(f"Trip with ID {trip_id} not found.")
-
-        # Deallocate the driver
-        return self.trip_dao.deallocate_driver(trip_id)
+        trip = self.get_trip_by_id(trip_id)
+        if not trip or not trip.get_driver_id():
+            return False
+    
+        # Free up the driver
+        self.driver_service.update_driver_status(trip.get_driver_id(), "Available")
+        self.trip_dao.deallocate_driver(trip_id)
+        return True
+    
+    def update_trip_status(self, trip_id: int, status: str):
+        return self.trip_dao.update_trip_status(trip_id, status)

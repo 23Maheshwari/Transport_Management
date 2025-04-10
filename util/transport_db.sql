@@ -142,3 +142,17 @@ ADD FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID) ON DELETE SET NULL;
 
 desc passengers;
 
+
+drop TABLE DriverIssues;
+SELECT * FROM DriverIssues;
+
+CREATE TABLE DriverIssues (
+    IssueID INT AUTO_INCREMENT PRIMARY KEY,
+    DriverID INT NOT NULL,
+    TripID INT NULL,
+    Description TEXT NOT NULL,
+    ReportedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Status ENUM('Pending', 'Resolved') DEFAULT 'Pending',
+    FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
+    FOREIGN KEY (TripID) REFERENCES Trips(TripID)
+);

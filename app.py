@@ -6,12 +6,14 @@ from entity.passenger import Passenger
 from entity.booking import Booking
 from exceptions.exceptions import BookingNotFoundException, InvalidBookingDataException
 from admin.admin import Admin
+from driver.driver_panel import DriverPanel
 
 # Initialize DAOs and Services
 passenger_dao = PassengerDAO()
 booking_dao = BookingDAO()
 booking_service = BookingService()
 trip_dao = TripDAO()
+
 def add_passenger():
     try:
         print("\n📝 Register as a New Customer:")
@@ -36,7 +38,6 @@ def add_passenger():
             print("❌ Invalid contact number. It must be numeric and between 10 and 15 digits.")
             return
 
-        # Create Passenger object
         passenger = Passenger(None, name, age, contact)
         passenger.set_gender(gender)
         passenger.set_email(email)
@@ -45,7 +46,7 @@ def add_passenger():
         print("✅ Registration successful!")
     except Exception as e:
         print(f"❌ Error adding passenger: {e}")
-        
+
 def view_all_data():
     try:
         print("\n🧍‍♂️ Registered Passengers:")
@@ -54,36 +55,31 @@ def view_all_data():
             print(p)
     except Exception as e:
         print(f"❌ Error fetching passengers: {e}")
+
 def view_available_trips():
     try:
         print("\n🚌 Available Trips:")
-        trips = trip_dao.get_available_trips()  # Fetch available trips
+        trips = trip_dao.get_available_trips()
         if trips:
             for trip in trips:
                 print(f"TripID: {trip[0]} "
                       f"DepartureDate: {trip[3]}, ArrivalDate: {trip[4]}, , "
                       f"MaxPassengers: {trip[7]}\n\n")
-                
         else:
             print("❌ No trips available at the moment.")
     except Exception as e:
         print(f"❌ Error fetching trips: {e}")
-        
+
 def book_trip():
     try:
-        # Show available trips
         view_available_trips()
-
         print("\n🚌 Book a Trip:")
         trip_id = int(input("Enter Trip ID: "))
         passenger_id = int(input("Enter Passenger ID: "))
         booking_date = input("Enter Booking Date (YYYY-MM-DD): ")
-        status = "Confirmed"  # Default status for a new booking
+        status = "Confirmed"
 
-        # Create a Booking object
         booking = Booking(None, trip_id, passenger_id, booking_date, status)
-
-        # Call the book_ticket method
         booking_service.book_ticket(booking)
         print("✅ Booking successful!")
     except Exception as e:
@@ -117,8 +113,7 @@ def cancel_booking(passenger_id: int):
     try:
         print("\n🛑 Cancel a Booking:")
         booking_id = int(input("Enter Booking ID to cancel: "))
-        # Cancel the booking
-        booking_service.cancel_booking(booking_id, passenger_id)  # Pass both booking_id and passenger_id
+        booking_service.cancel_booking(booking_id, passenger_id)
         print(f"✅ Booking with ID {booking_id} has been successfully canceled.")
     except BookingNotFoundException as e:
         print(f"❌ {e}")
@@ -133,7 +128,6 @@ def customer_menu():
         is_new_user = input("Are you a new user? (yes/no): ").strip().lower()
 
         if is_new_user == "yes":
-            # Register the new user
             add_passenger()
             book_now = input("Do you want to book a trip? (yes/no): ").strip().lower()
             if book_now == "yes":
@@ -141,7 +135,6 @@ def customer_menu():
             return
 
         elif is_new_user == "no":
-            # Existing user flow
             pid = int(input("Enter your Passenger ID to log in: "))
             passenger = passenger_dao.get_passenger_by_id(pid)
             if not passenger:
@@ -181,7 +174,10 @@ def admin_menu():
         print("1. Manage Trips")
         print("2. Manage Bookings")
         print("3. Manage Passengers")
-        print("4. Logout")
+        print("4. Manage Vehicles")
+        print("5. Manage Routes")
+        print("6. Reports and Analytics")
+        print("7. Logout")
         choice = input("Enter choice: ")
 
         if choice == "1":
@@ -191,17 +187,33 @@ def admin_menu():
         elif choice == "3":
             Admin.manage_passengers()
         elif choice == "4":
+            Admin.manage_vehicles()
+        elif choice == "5":
+            Admin.manage_routes()
+        elif choice == "6":
+            Admin.view_reports()
+        elif choice == "7":
             print("👋 Logging out. Bye!")
             break
         else:
             print("❌ Invalid choice. Try again.")
+
+def driver_menu():
+    try:
+        print("\n🚚 Welcome to Driver Login")
+        driver_id = int(input("Enter your Driver ID: "))
+        driver_panel = DriverPanel(driver_id)
+        driver_panel.show_menu()
+    except Exception as e:
+        print(f"❌ Error in driver menu: {e}")
 
 def main():
     while True:
         print("\n===== Transport Management System =====")
         print("1. 👨‍💼 Admin Login")
         print("2. 👤 Customer Login")
-        print("3. 🚪 Exit")
+        print("3. 🚚 Driver Login")
+        print("4. 🚪 Exit")
         choice = input("Enter choice: ")
 
         if choice == "1":
@@ -209,6 +221,8 @@ def main():
         elif choice == "2":
             customer_menu()
         elif choice == "3":
+            driver_menu()
+        elif choice == "4":
             print("👋 Exiting system. Bye!")
             break
         else:

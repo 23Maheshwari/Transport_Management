@@ -59,13 +59,11 @@ class Trip:
         self.__max_passengers = max_passengers
     
     # Getter and Setter for driver_id
-    def get_driver_id(self):
-        return self.__driver_id
-
-    def set_driver_id(self, driver_id):
+    def set_driver_id(self, driver_id: int):
         self.__driver_id = driver_id
-    
-  
+
+    def get_driver_id(self) -> int:
+        return self.__driver_id
     def __str__(self):
         return (f"TripID: {self.trip_id}, VehicleID: {self.vehicle_id}, RouteID: {self.route_id}, "
                 f"DepartureDate: {self.departure_date}, ArrivalDate: {self.arrival_date}, "
