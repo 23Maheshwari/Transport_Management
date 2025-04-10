@@ -80,8 +80,8 @@ def book_trip():
         status = "Confirmed"
 
         booking = Booking(None, trip_id, passenger_id, booking_date, status)
-        booking_service.book_ticket(booking)
-        print("✅ Booking successful!")
+        booking_id = booking_service.book_ticket(booking)
+        print(f"✅ Booking successful! Your Booking ID is: {booking_id}")
     except Exception as e:
         print(f"❌ Error booking trip: {e}")
 
@@ -140,7 +140,7 @@ def customer_menu():
             if not passenger:
                 print("❌ Passenger not found. Please register first.")
                 return
-
+            print(f"\n👋 Welcome back, {passenger.get_first_name()}!")
             while True:
                 print("\n===== Customer Panel =====")
                 print("1. 🚌 Book a Trip")

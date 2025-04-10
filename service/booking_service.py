@@ -50,3 +50,6 @@ class BookingService:
     
     def get_past_bookings_by_passenger_id(self, passenger_id: int):
         return self.booking_dao.get_past_bookings_by_passenger_id(passenger_id)
+    
+    def book_ticket(self, booking: Booking):
+        return self.booking_dao.add_booking(booking)

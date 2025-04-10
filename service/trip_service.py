@@ -88,15 +88,18 @@ class TripService:
         return True
 
     def deallocate_driver(self, trip_id: int) -> bool:
-        trip = self.get_trip_by_id(trip_id)
-        if not trip or not trip.get_driver_id():
-            return False
-    
-        # Free up the driver
-        self.driver_service.update_driver_status(trip.get_driver_id(), "Available")
-        self.trip_dao.deallocate_driver(trip_id)
+        driver_id = self.driver_dao.get_driver_id_by_trip(trip_id)
+        if not driver_id:
+            raise DriverNotFoundException("No driver assigned to this trip")
+
+        self.driver_dao.deallocate_driver(trip_id)
+        self.driver_dao.update_driver_status(driver_id, "Available")
+
+        # ❗ Remove the driver from the trip record
+        self.trip_dao.allocate_driver(trip_id, None)  # This must set driver_id to NULL in Trips table
+
         return True
-    
+
     def update_trip_status(self, trip_id: int, status: str):
         return self.trip_dao.update_trip_status(trip_id, status)
     

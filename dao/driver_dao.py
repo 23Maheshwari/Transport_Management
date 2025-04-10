@@ -98,5 +98,16 @@ class DriverDAO:
         query = "UPDATE Trips SET Status = %s WHERE TripID = %s"
         self.cursor.execute(query, (status, trip_id))
         self.conn.commit()
+        
+    def get_driver_id_by_trip(self, trip_id: int):
+        query = "SELECT DriverID FROM Trips WHERE TripID = %s"
+        self.cursor.execute(query, (trip_id,))
+        row = self.cursor.fetchone()
+        if row:
+            return row[0]
+        return None
 
-    
+    def deallocate_driver(self, trip_id: int):
+        query = "UPDATE Trips SET DriverID = NULL WHERE TripID = %s"
+        self.cursor.execute(query, (trip_id,))
+        self.conn.commit()
